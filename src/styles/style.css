@@ -181,22 +181,34 @@ html, body {
         font-size: 0.8em;
         text-transform: uppercase;
 
-        & p::first-letter {
+        & span::first-letter {
             font-size: 1.25em;
         }
+
+        & span { display: block; }
     }
 
     & .poem-data-holder {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         order: 2;
+        justify-content: space-between;
         background-color: rgb(0, 0, 0, 0.25);
 
         & .author {
             font-size: 0.85em;
             text-indent: 0.5em;
+            width: fit-content;
 
             &:before { content: "-"; }
+        }
+
+        & .copy {
+            width: fit-content;
+            font-size: 0.85em;
+            cursor: pointer;
+
+            background-color: rgb(0, 0, 0, 0.25);
         }
     }
 }
@@ -213,4 +225,80 @@ html, body {
         padding: 5px;
         cursor: pointer;
     }
+}
+
+#content .tab.about {
+
+    & .personal-holder {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        & .top {
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+
+            & .profile-picture {
+                border-radius: 8px;
+                height: 96px;
+            }
+
+            & .me {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+
+                & .display-name { font-weight: bold; }
+
+                & .username {
+                    font-size: 0.8em;
+
+                    /*&:before { content: "@"; font-size: 0.8em; position: relative; top: -1px; }*/
+                }
+
+                & .social {
+
+                    & .username { position: relative; top: -4px; }
+                    
+                    & .icon {
+                        height: 1.35em;
+                        width: 1.35em;
+                        position: relative;
+                        top: 4px;
+                    }
+
+                    &.discord .icon g { fill: var(--discord, white); }
+                    &.github .icon g { fill: var(--github, white); }
+                }
+            }
+
+            & .socials {
+                display: flex;
+                flex-direction: row;
+                gap: 5px;
+
+                & .social {
+                    cursor: pointer;
+
+                    & svg {
+                        height: 16px;
+                        width: 16px;    
+                    }
+
+                    &.twitter svg g { fill: var(--twitter, white); }
+                    &.instagram svg g { fill: var(--instagram, white); }
+                    &.twitch svg g { fill: var(--twitch, white); }
+                }
+            }
+        }
+    }
+}
+
+.social .icon g, .social svg g {
+    --discord: #5865f2;
+    --github: #c8c8c8;
+    --twitter: #c8c8c8;
+    --instagram: #E1306C;
+    --twitch: #6441a5;
 }
