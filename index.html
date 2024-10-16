@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siren's Website</title>
+    <style>
+        :root {
+            --bg-color-primary: rgb(4, 3, 6);
+            --color-primary: rgb(200, 200, 200);
+        }
+
+        html { background-color: var(--bg-color-primary); color: var(--color-primary); }
+    </style>
+    <link rel="stylesheet" href="./src/styles/one-liner.css">
+    <link rel="stylesheet" href="./src/styles/style.css">
+</head>
+<body>
+    <div id="nav" class="" noMenuPropagation="true">
+        <div class="nav-holder" noMenuPropagation="true">
+            <!-- Nav button is the only thing visible -->
+            <!-- On tap, show list-view navigator -->
+            <a onclick="showContent('home')">Home</a>
+            <a onclick="showContent('poems')">Poems</a>
+            <!--<a onclick="showContent('songs')">Songs</a>-->
+            <a onclick="showContent('about')">About Me</a>
+        </div>
+    </div>
+    <a class="nav-button"></a>
+
+    <!--
+        Plans:
+        - Display home page like normal
+        - Don't use extra html files -- load everything on index
+        -- Poems anchor will load ./media/poems/data.json in some sort of div
+    -->
+
+    <div id="content">
+        <div class="tab home">
+            <div class="header">Siren's Website (WIP)</div>
+            <div class="open-menu-button">Open Menu</div>
+        </div>
+        <div class="tab poems">
+
+        </div>
+        <div class="tab songs">WIP</div>
+        <div class="tab about">
+            WIP
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="holder">
+
+        </div>
+    </div>
+
+    <div class="backdrop"></div>
+
+    <script>
+        // Change strippedHref to use window.location.href
+        // When deploying to GitHub
+        const strippedHref = window.location.href.slice(0, -11);
+        poemData = {};
+
+        fetch(`${strippedHref}/src/media/poems/data.json`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error fetching poem data: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                poemData = data;
+                const poemsContent = document.querySelector("#content .tab.poems");
+                for (const poemTitle in poemData) {
+                    const poem = poemData[poemTitle];
+                    
+                    const poemHolder = document.createElement("div");
+                    poemHolder.classList.add("poem-holder");
+
+                    const poemHeader = document.createElement("div");
+                    poemHeader.textContent = poemTitle;
+                    poemHeader.classList.add("poem-header");
+                    poemHeader.setAttribute("type", poem.Type);
+                    poemHeader.setAttribute("created", poem.Created)
+
+                    const poemDataDiv = document.createElement("div");
+                    poemDataDiv.classList.add("poem-data-holder");
+                    const poemAuthor = document.createElement("span");
+                    poemAuthor.textContent = poem.Author;
+                    poemAuthor.classList.add("author");
+
+                    const poemContentHolder = document.createElement("div");
+                    poemContentHolder.classList.add("poem");
+
+                    const poemContent = poem.Content;
+                    poemContent.forEach(line => {
+                        const newLine = document.createElement("p");
+                        newLine.textContent = line;
+
+                        poemContentHolder.appendChild(newLine);
+                    })
+
+                    poemHolder.appendChild(poemHeader);
+                    poemHolder.appendChild(poemDataDiv);
+                    poemDataDiv.appendChild(poemAuthor);
+                    poemHolder.appendChild(poemContentHolder);
+                    poemsContent.appendChild(poemHolder);
+
+                    poemHeader.addEventListener("click", function() {
+                        if (poemHolder.classList.contains("expanded")) {
+                            poemHolder.classList.remove("expanded");
+                        } else {
+                            poemHolder.classList.add("expanded");
+                        }
+                    })
+                }
+
+                // Create footer content
+                const nPoems = Object.keys(poemData).length;
+                const nPoemsEl = document.createElement("span");
+                nPoemsEl.classList.add("n-poems");
+                nPoemsEl.textContent = `${nPoems} poems`;
+                
+                document.querySelector("#footer .holder").appendChild(nPoemsEl);
+            })
+            .catch(error => {
+                console.error("Error fetching poem data:", error);
+            });
+    </script>
+    <script src="./src/scripts/nav.js"></script>
+    <script src="./src/scripts/mobile-check.js"></script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+:root {
+    --bg-color-primary: rgb(4, 3, 6);
+    --color-primary: rgb(200, 200, 200);
+}
+
+html { background-color: var(--bg-color-primary); color: var(--color-primary); font-family: Arial; }
+
+html, body {
+    height: 100dvh;
+    width: 100dvw;
+    overflow: hidden;
+}
+
+.backdrop {
+    z-index: 2;
+    position: fixed;
+    top: 0; left: 0;
+    height: 100%; width: 100%;
+    background-color: rgb(0, 0, 0, 0.5);
+
+    opacity: 0%;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
+
+    &.show {
+        opacity: 100%;
+        pointer-events: all;
+    }
+}
+
+.nav-button { 
+    display: block;
+    position: fixed;
+    top: 5px; left: 5px;
+    height: 2em; width: 2em;
+    background: rgb(30, 30, 30);
+    border-radius: 8px;
+    opacity: 50%;
+
+    z-index: 16;
+
+    &::before {
+        content: "";
+        height: 1em; width: 1em;
+        position: fixed;
+        padding: 10px;
+        top: calc(5px + .4em); left: calc(5px + .4em);
+        background: linear-gradient(
+            to bottom, 
+            rgb(150, 150, 150), rgb(150, 150, 150) 20%, 
+            transparent 20%, transparent 40%, 
+            rgb(150, 150, 150) 40%, rgb(150, 150, 150) 60%, 
+            transparent 60%, transparent 80%, 
+            rgb(150, 150, 150) 80%, rgb(150, 150, 150) 100%
+        );
+    }
+}
+
+#nav {
+    transition: width 0.5s ease-in-out;
+    position: fixed;
+    top: 0; left: 0;
+    height: 100%; width: 0%;
+    z-index: 4;
+    background-color: rgb(30, 30, 30);
+    user-select: none;
+
+    & .nav-holder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+
+        & a {
+            visibility: hidden;
+            opacity: 0%;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.25em;
+            padding: 5px;
+        }
+    }
+
+    &.show {
+        display: block;
+
+        &+ .nav-button {
+            display: none;
+        }
+
+        & .nav-holder a {
+            visibility: visible;
+            transition: opacity 1s ease-in-out;
+            opacity: 100%;
+        }
+    }
+}
+
+#content .tab.poems {
+    flex-direction: column;
+    gap: 10px;
+}
+
+#content {
+    position: fixed;
+    top: calc(2em + 10px); left: 5px;
+    height: calc(100% - 2em - 20px - 1em - 10px); width: calc(100% - 10px);
+    background-color: rgb(4, 3, 6);
+
+    & .tab {
+        display: none;
+
+        &.show {
+            display: flex;
+        }
+    }
+}
+
+#footer {
+    position: fixed;
+    bottom: 0em;
+    height: calc(1em + 5px);
+    background-color: rgb(30, 30, 30);
+    width: 100%;
+    user-select: none;
+    padding: 0px 5px;
+
+    & .holder {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+
+        & * {
+
+            &:before {
+                content: "• ";
+            }
+        }
+    }
+}
+
+.poem-holder {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: 1.5em;    
+    overflow: hidden;
+    background-color: rgb(30, 30, 30);
+    user-select: none;
+    
+
+    &.expanded { height: fit-content; }
+    /*&:first-of-type { max-height: fit-content; height: fit-content; }*/
+
+    & .poem-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 1.25em;
+        font-weight: 600;
+        order: 0;
+        background-color: rgb(0, 0, 0, 0.25);
+
+        &:after {
+            content: attr(created);
+            background-color: rgb(15, 15, 15);
+            float: right;
+            padding: 5px;
+            font-size: 0.65em;
+            font-weight: bold;
+        }
+    }
+
+    & .poem {
+        order: 1;
+        font-family: monospace;
+        user-select: text;
+        margin-left: 5px;
+        font-size: 0.8em;
+        text-transform: uppercase;
+
+        & p::first-letter {
+            font-size: 1.25em;
+        }
+    }
+
+    & .poem-data-holder {
+        display: flex;
+        flex-direction: column;
+        order: 2;
+        background-color: rgb(0, 0, 0, 0.25);
+
+        & .author {
+            font-size: 0.85em;
+            text-indent: 0.5em;
+
+            &:before { content: "-"; }
+        }
+    }
+}
+
+#content .tab.home {
+    flex-direction: column;
+    gap: 5px;
+    user-select: none;
+
+    & .open-menu-button {
+        background-color: rgb(30, 30, 30);
+        border-radius: 8px;
+        width: fit-content;
+        padding: 5px;
+        cursor: pointer;
+    }
+}
