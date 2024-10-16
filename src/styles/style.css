@@ -107,6 +107,7 @@ html, body {
     top: calc(2em + 10px); left: 5px;
     height: calc(100% - 2em - 20px - 1em - 10px); width: calc(100% - 10px);
     background-color: rgb(4, 3, 6);
+    overflow: hidden scroll;
 
     & .tab {
         display: none;
