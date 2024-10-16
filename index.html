@@ -60,9 +60,11 @@
     <script>
         // Change strippedHref to use window.location.href
         // When deploying to GitHub
-        const strippedHref = window.location.href.slice(0, -11);
+        //const strippedHref = window.location.href.slice(0, -11);
+        const strippedHref = window.location.href;
         poemData = {};
 
+        //fetch(`${strippedHref}/src/media/poems/data.json`)
         fetch(`${strippedHref}/src/media/poems/data.json`)
             .then(response => {
                 if (!response.ok) {
