@@ -36,7 +36,7 @@
     -->
 
     <div id="content">
-        <div class="tab home show">
+        <div class="tab home">
             <div class="header">Siren's Website (WIP)</div>
             <div class="open-menu-button">Open Menu</div>
         </div>
@@ -44,7 +44,7 @@
 
         </div>
         <div class="tab songs">WIP</div>
-        <div class="tab about">
+        <div class="tab about show">
             <div class="personal-holder">
                 <div class="top">
                     <img class="profile-picture" src="./src/media/personal/current-profile-picture.png">
@@ -82,14 +82,38 @@
                         </div>
                     </div>
                 </div>
+                <div class="bottom">
+                    <div class="topic-navigator">
+                        <a>About me</a>
+                    </div>
+                    <div class="topic-holder">
+                        <div class="topic about-me">
+                            Nineteen years old <br>
+                            Amateur programmer and gamer <br>
+                            I love poetry and music! <br>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="footer">
         <div class="holder">
-
+            
         </div>
+    </div>
+
+    <div id="notifications">
+        <!--
+        <div class="notification error">
+            <div class="title">Testing</div>
+            <div class="notification-content">
+                This is a test notification!
+                <div class="tail-end"></div>
+            </div>
+        </div>
+        -->
     </div>
 
     <div class="backdrop"></div>
@@ -171,12 +195,21 @@
                     })
 
                     copyText.addEventListener("click", function() {
-                        poemContentHolder.style = "text-transform: none !important;"
-                        let toCopy = poemContentHolder.innerText;
-                        toCopy = toCopy.replace(/---/g, "");
-                        poemContentHolder.style = "";
+                        let toCopy = "";
+                        poemContentHolder.querySelectorAll("span").forEach(span => {
+                            if (span.textContent !== "---") {
+                                toCopy += span.textContent + "\n";
+                            } else {
+                                toCopy += "\n";
+                            }
+                        })
                         navigator.clipboard.writeText(toCopy);
                         copyText.textContent = "Copied";
+                        createNotification(
+                            title="Copy content", 
+                            content="Copying content was successful.", 
+                            severity="success"
+                        );
                         setTimeout(function() {
                             copyText.textContent = "Copy";
                         }, 2500)
@@ -200,8 +233,57 @@
         const isMobile = mobileCheck();
         if (!isHttpServer()) {
             if (!isMobile) {
-                alert("This website is not designed for desktop users yet. Please view this website on a mobile device.")
+                //alert("This website is not designed for desktop users yet. Please view this website on a mobile device.")
+                createNotification(
+                    title = "Device may not be supported",
+                    content = "This website is not designed for non-mobile browsers yet. The site is still functional, but please keep that in mind.",
+                    severity = "warning"
+                )
             }
+        }
+    </script>
+    <script>
+        const notifications = document.getElementById("notifications");
+        function createNotification(title, content, severity) {
+            if (!severity) { severity = "success"; }
+
+            const notification = document.createElement("div");
+            notification.classList.add("notification");
+            notification.classList.add(severity);
+
+            const notificationTitle = document.createElement("div");
+            notificationTitle.classList.add("title");
+            notificationTitle.textContent = title;
+
+            const notificationContent = document.createElement("div");
+            notificationContent.classList.add("notification-content");
+            notificationContent.textContent = content;
+
+            const notificationTimer = document.createElement("div");
+            notificationTimer.classList.add("tail-end");
+
+            notification.appendChild(notificationTitle);
+            notificationContent.appendChild(notificationTimer);
+            notification.appendChild(notificationContent);
+            notifications.append(notification);
+
+            notification.style = "transition: opacity 0.2s";
+
+            console.log(notification);
+
+            document.querySelector(".backdrop").classList.add("show");
+
+            setTimeout(function() {
+                notificationTimer.style.width = "0";
+            }, 300)
+
+            setTimeout(function() {
+                notification.style.opacity = "0%";
+                setTimeout(function() {
+                    notification.remove();
+                    document.querySelector(".backdrop").classList.remove("show");
+                }, 400);
+            }, 5300);
         }
     </script>
 </body>

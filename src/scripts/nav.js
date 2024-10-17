@@ -12,6 +12,7 @@ function isNavShowing() {
 }
 
 document.body.addEventListener("click", (event) => {
+    clearNotifications();
     if (event.target.getAttribute("noMenuPropagation") === "true") { return; }
     backdrop.classList.remove("show");
     if (!isNavShowing()) { return; }
@@ -43,6 +44,16 @@ function clearTabs(tabList) {
     tabList.forEach(tab => {
         document.querySelector(`#content .tab.${tab}`).classList.remove("show");
     })
+}
+
+function clearNotifications() {
+    const notifications = document.querySelectorAll(".notification")
+    if (notifications) {
+        notifications.forEach(notification => {
+            notification.remove();
+            backdrop.classList.remove("show");
+        })
+    }
 }
 
 function showContent(tab) {
