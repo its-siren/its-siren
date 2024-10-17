@@ -162,6 +162,7 @@
                     const copyText = document.createElement("a");
                     copyText.textContent = "Copy";
                     copyText.classList.add("copy");
+                    copyText.setAttribute("noNotificationPropagation", true);
 
                     const poemContentHolder = document.createElement("div");
                     poemContentHolder.classList.add("poem");
@@ -228,23 +229,12 @@
                 console.error("Error fetching poem data:", error);
             });
     </script>
-    <script src="./src/scripts/nav.js"></script>
-    <script src="./src/scripts/mobile-check.js">
-        const isMobile = mobileCheck();
-        if (!isHttpServer()) {
-            if (!isMobile) {
-                //alert("This website is not designed for desktop users yet. Please view this website on a mobile device.")
-                createNotification(
-                    title = "Device may not be supported",
-                    content = "This website is not designed for non-mobile browsers yet. The site is still functional, but please keep that in mind.",
-                    severity = "warning"
-                )
-            }
-        }
-    </script>
     <script>
         const notifications = document.getElementById("notifications");
         function createNotification(title, content, severity) {
+            if (isMobile()) {
+                clearNotifications();
+            }
             if (!severity) { severity = "success"; }
 
             const notification = document.createElement("div");
@@ -271,6 +261,8 @@
 
             console.log(notification);
 
+            notifications.style.pointerEvents = "all";
+
             document.querySelector(".backdrop").classList.add("show");
 
             setTimeout(function() {
@@ -282,8 +274,23 @@
                 setTimeout(function() {
                     notification.remove();
                     document.querySelector(".backdrop").classList.remove("show");
+                    notifications.style.pointerEvents = "none";
                 }, 400);
             }, 5300);
+        }
+    </script>
+    <script src="./src/scripts/nav.js"></script>
+    <script src="./src/scripts/mobile-check.js">
+        const isMobile = mobileCheck();
+        if (!isHttpServer()) {
+            if (!isMobile) {
+                //alert("This website is not designed for desktop users yet. Please view this website on a mobile device.")
+                createNotification(
+                    title = "Device may not be supported",
+                    content = "This website is not designed for non-mobile browsers yet. The site is still functional, but please keep that in mind.",
+                    severity = "warning"
+                )
+            }
         }
     </script>
 </body>

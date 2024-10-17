@@ -2,6 +2,7 @@ const navButton = document.querySelector(".nav-button");
 const nav = document.querySelector("#nav");
 const backdrop = document.querySelector(".backdrop");
 const openMenuButton = document.querySelector(".open-menu-button");
+const notificationsDiv = document.getElementById("notifications");
 
 function isNavShowing() {
     if (nav.classList.contains("show")) {
@@ -12,7 +13,6 @@ function isNavShowing() {
 }
 
 document.body.addEventListener("click", (event) => {
-    clearNotifications();
     if (event.target.getAttribute("noMenuPropagation") === "true") { return; }
     backdrop.classList.remove("show");
     if (!isNavShowing()) { return; }
@@ -47,14 +47,18 @@ function clearTabs(tabList) {
 }
 
 function clearNotifications() {
-    const notifications = document.querySelectorAll(".notification")
-    if (notifications) {
-        notifications.forEach(notification => {
+    const _notifications = document.querySelectorAll(".notification");
+    if (_notifications) {
+        _notifications.forEach(notification => {
             notification.remove();
             backdrop.classList.remove("show");
         })
     }
+    notificationsDiv.style.pointerEvents = "none";
 }
+
+notificationsDiv.addEventListener("click", clearNotifications)
+
 
 function showContent(tab) {
     const validTabs = ["home", "poems", "songs", "about"];
